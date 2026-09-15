@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Mock Interview - CareerAI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 13px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            background: #374151;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+        }
+
+        .question {
+            font-size: 21px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            padding: 15px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        button {
+            margin-top: 15px;
+
+            padding: 13px 22px;
+
+            border: none;
+            border-radius: 8px;
+
+            background: #111827;
+            color: white;
+
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #374151;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .question {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            CareerAI
+        </div>
+
+        <div class="nav-links">
+            <a href="/dashboard/">Dashboard</a>
+            <a href="/analysis/">Analysis</a>
+            <a href="/roadmap/">Roadmap</a>
+            <a href="/interview/">Interview</a>
+            <a href="/chat/">AI Chat</a>
+            <a href="/logout/">Logout</a>
+        </div>
+
+    </nav>
+
+    <main class="container">
+
+        <div class="header">
+
+            <h1>🎤 AI Mock Interview</h1>
+
+            <p class="subtitle">
+                Practice your interview skills and receive AI feedback.
+            </p>
+
+        </div>
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+        {% if interview %}
+
+        <div class="card">
+
+            <div class="question">
+                {{ interview.question }}
+            </div>
+
+            <form
+                method="post"
+                action="/interview/{{ interview.id }}/submit/"
+            >
+
+                {% csrf_token %}
+
+                <textarea
+                    name="answer"
+                    placeholder="Write your answer here..."
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Submit Answer
+                </button>
+
+            </form>
+
+        </div>
+
+        {% else %}
+
+        <div class="card">
+
+            <p>
+                Start an AI-generated interview question.
+            </p>
+
+            <a href="/interview/" style="
+                display:inline-block;
+                padding:12px 20px;
+                background:#111827;
+                color:white;
+                text-decoration:none;
+                border-radius:8px;
+            ">
+                Start Interview
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

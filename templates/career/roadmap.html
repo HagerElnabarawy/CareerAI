@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Learning Roadmap - CareerAI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: #111827;
+            color: white;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 13px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            background: #374151;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+
+            border-left: 5px solid #2563eb;
+        }
+
+        .step.completed {
+            border-left-color: #16a34a;
+            opacity: 0.85;
+        }
+
+        .step-number {
+            color: #2563eb;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .step h2 {
+            margin: 0 0 10px 0;
+        }
+
+        .step p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .completed-label {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 16px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+
+        .button:hover {
+            background: #374151;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .empty {
+            background: white;
+            text-align: center;
+            padding: 50px;
+            border-radius: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            CareerAI
+        </div>
+
+        <div class="nav-links">
+            <a href="/dashboard/">Dashboard</a>
+            <a href="/analysis/">Analysis</a>
+            <a href="/roadmap/">Roadmap</a>
+            <a href="/interview/">Interview</a>
+            <a href="/chat/">AI Chat</a>
+            <a href="/logout/">Logout</a>
+        </div>
+
+    </nav>
+
+    <main class="container">
+
+        <h1>📚 My AI Learning Roadmap</h1>
+
+        <p class="subtitle">
+            A personalized learning path based on your career analysis.
+        </p>
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        {% if roadmap %}
+
+            {% for item in roadmap %}
+
+                <div class="step {% if item.completed %}completed{% endif %}">
+
+                    {% if item.completed %}
+                        <div class="completed-label">
+                            ✓ Completed
+                        </div>
+                    {% endif %}
+
+                    <div class="step-number">
+                        STEP {{ forloop.counter }}
+                    </div>
+
+                    <h2>
+                        {{ item.title }}
+                    </h2>
+
+                    <p>
+                        {{ item.description }}
+                    </p>
+
+                    <a
+                        href="/roadmap/{{ item.id }}/toggle/"
+                        class="button"
+                    >
+                        {% if item.completed %}
+                            Mark as Incomplete
+                        {% else %}
+                            Mark Complete
+                        {% endif %}
+                    </a>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+
+                <h2>No roadmap yet</h2>
+
+                <p>
+                    Generate your personalized AI roadmap from the Career Analysis page.
+                </p>
+
+                <a href="/analysis/" class="button">
+                    Go to Career Analysis
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

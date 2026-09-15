@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        CareerAI Assistant
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f7fb;
+
+            color: #1f2937;
+        }
+
+
+        .navbar {
+            background: #111827;
+
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .logo {
+            font-size: 24px;
+
+            font-weight: bold;
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .nav-links a {
+            color: white;
+
+            text-decoration: none;
+
+            padding: 9px 13px;
+
+            border-radius: 6px;
+        }
+
+
+        .nav-links a:hover {
+            background: #374151;
+        }
+
+
+        .container {
+            max-width: 950px;
+
+            margin: auto;
+
+            padding: 35px 20px;
+        }
+
+
+        .chat-box {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            box-shadow:
+                0 4px 18px
+                rgba(0, 0, 0, 0.07);
+
+            min-height: 450px;
+        }
+
+
+        .message {
+            padding: 14px 16px;
+
+            margin: 12px 0;
+
+            border-radius: 12px;
+
+            line-height: 1.6;
+
+            white-space: pre-wrap;
+        }
+
+
+        .user {
+            background: #e8f0fe;
+        }
+
+
+        .assistant {
+            background: #f3f4f6;
+        }
+
+
+        .role {
+            font-weight: bold;
+
+            margin-bottom: 6px;
+        }
+
+
+        .empty {
+            text-align: center;
+
+            color: #6b7280;
+
+            padding: 80px 20px;
+        }
+
+
+        form {
+            margin-top: 20px;
+        }
+
+
+        textarea {
+            width: 100%;
+
+            min-height: 110px;
+
+            padding: 15px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            font-family: Arial, sans-serif;
+
+            resize: vertical;
+        }
+
+
+        textarea:focus {
+            outline: none;
+
+            border-color: #2563eb;
+        }
+
+
+        button {
+            margin-top: 12px;
+
+            padding: 12px 22px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #111827;
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+        }
+
+
+        button:hover {
+            background: #374151;
+        }
+
+
+        button:disabled {
+            background: #9ca3af;
+
+            cursor: not-allowed;
+        }
+
+
+        /* =========================
+           CHAT LOADING
+        ========================= */
+
+        .loading {
+            display: none;
+
+            margin-top: 15px;
+
+            padding: 14px;
+
+            background: #eff6ff;
+
+            color: #1d4ed8;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+        }
+
+
+        .spinner {
+            display: inline-block;
+
+            width: 18px;
+
+            height: 18px;
+
+            border: 3px solid #bfdbfe;
+
+            border-top: 3px solid #2563eb;
+
+            border-radius: 50%;
+
+            animation:
+                spin 0.8s linear infinite;
+
+            vertical-align: middle;
+
+            margin-right: 8px;
+        }
+
+
+        @keyframes spin {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                flex-direction: column;
+
+                gap: 15px;
+
+                padding: 15px 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <nav class="navbar">
+
+        <div class="logo">
+            CareerAI
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="/dashboard/">
+                Dashboard
+            </a>
+
+            <a href="/analysis/">
+                Analysis
+            </a>
+
+            <a href="/roadmap/">
+                Roadmap
+            </a>
+
+            <a href="/interview/">
+                Interview
+            </a>
+
+            <a href="/chat/">
+                AI Chat
+            </a>
+
+            <a href="/logout/">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+
+        <h1>
+            🤖 CareerAI Assistant
+        </h1>
+
+
+        <p>
+            Ask CareerAI about programming, careers,
+            learning plans, interviews, and your skills.
+        </p>
+
+
+        <div class="chat-box">
+
+
+            {% for message in messages %}
+
+
+            <div
+                class="message
+                {% if message.role == 'user' %}
+                    user
+                {% else %}
+                    assistant
+                {% endif %}"
+            >
+
+                <div class="role">
+
+                    {% if message.role == "user" %}
+
+                        You
+
+                    {% else %}
+
+                        CareerAI
+
+                    {% endif %}
+
+                </div>
+
+
+                <div>
+                    {{ message.message }}
+                </div>
+
+            </div>
+
+
+            {% empty %}
+
+
+            <div class="empty">
+
+                Start a conversation with CareerAI.
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        <form
+            method="post"
+            id="chat-form"
+        >
+
+            {% csrf_token %}
+
+
+            <textarea
+                name="message"
+                placeholder="Ask CareerAI something..."
+                required
+                id="chat-message"
+            ></textarea>
+
+
+            <button
+                type="submit"
+                id="chat-button"
+            >
+                Send Message
+            </button>
+
+
+        </form>
+
+
+        <!-- LOADING -->
+
+        <div
+            class="loading"
+            id="chat-loading"
+        >
+
+            <span class="spinner"></span>
+
+            CareerAI is thinking...
+
+            <br>
+
+            <small>
+                Please wait for the AI response.
+            </small>
+
+        </div>
+
+
+    </main>
+
+
+    <script>
+
+        const chatForm =
+            document.getElementById(
+                "chat-form"
+            );
+
+
+        const chatLoading =
+            document.getElementById(
+                "chat-loading"
+            );
+
+
+        const chatButton =
+            document.getElementById(
+                "chat-button"
+            );
+
+
+        const chatMessage =
+            document.getElementById(
+                "chat-message"
+            );
+
+
+        chatForm.addEventListener(
+            "submit",
+            function () {
+
+                if (!chatMessage.value.trim()) {
+                    return;
+                }
+
+
+                chatLoading.style.display =
+                    "block";
+
+
+                chatButton.disabled =
+                    true;
+
+
+                chatButton.textContent =
+                    "Thinking...";
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

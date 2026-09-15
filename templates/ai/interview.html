@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Mock Interview</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        .question {
+            background: #eef2ff;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 180px;
+            margin-top: 20px;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 25px;
+        }
+
+        .error {
+            background: #ffe5e5;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a href="/dashboard/">← Dashboard</a>
+
+    <h1>AI Mock Interview</h1>
+
+    {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    {% if interview %}
+
+        <div class="question">
+            {{ interview.question }}
+        </div>
+
+        <form method="post"
+              action="{% url 'submit_interview' interview.id %}">
+
+            {% csrf_token %}
+
+            <textarea
+                name="answer"
+                placeholder="Write your answer here..."
+                required
+            ></textarea>
+
+            <button type="submit">
+                Submit Answer
+            </button>
+
+        </form>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

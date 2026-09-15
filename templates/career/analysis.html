@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Career Analysis - CareerAI
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f4f7fb;
+
+            color: #1f2937;
+        }
+
+
+        .navbar {
+            background: #111827;
+
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .logo {
+            font-size: 24px;
+
+            font-weight: bold;
+        }
+
+
+        .nav-links {
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .nav-links a {
+            color: white;
+
+            text-decoration: none;
+
+            padding: 9px 13px;
+
+            border-radius: 6px;
+        }
+
+
+        .nav-links a:hover {
+            background: #374151;
+        }
+
+
+        .container {
+            max-width: 1000px;
+
+            margin: auto;
+
+            padding: 40px 20px;
+        }
+
+
+        .subtitle {
+            color: #6b7280;
+
+            margin-bottom: 30px;
+        }
+
+
+        .card {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 25px;
+
+            margin-bottom: 20px;
+
+            box-shadow:
+                0 4px 18px
+                rgba(0, 0, 0, 0.07);
+        }
+
+
+        .career-title {
+            font-size: 30px;
+
+            font-weight: bold;
+
+            margin-top: 12px;
+        }
+
+
+        .grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 20px;
+        }
+
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+
+        ul {
+            padding-left: 22px;
+
+            line-height: 1.8;
+        }
+
+
+        .analysis-text {
+            white-space: pre-wrap;
+
+            line-height: 1.7;
+
+            color: #4b5563;
+        }
+
+
+        .button {
+            display: inline-block;
+
+            padding: 12px 20px;
+
+            background: #111827;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 8px;
+
+            margin-top: 15px;
+        }
+
+
+        .button:hover {
+            background: #374151;
+        }
+
+
+        .button-blue {
+            background: #2563eb;
+        }
+
+
+        .button-blue:hover {
+            background: #1d4ed8;
+        }
+
+
+        .error {
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            padding: 15px;
+
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .empty {
+            text-align: center;
+
+            padding: 50px 20px;
+
+            color: #6b7280;
+        }
+
+
+        /* =========================
+           ROADMAP LOADING
+        ========================= */
+
+        .loading {
+            display: none;
+
+            margin-top: 20px;
+
+            padding: 16px;
+
+            background: #eff6ff;
+
+            color: #1d4ed8;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+        }
+
+
+        .spinner {
+            display: inline-block;
+
+            width: 18px;
+
+            height: 18px;
+
+            border: 3px solid #bfdbfe;
+
+            border-top: 3px solid #2563eb;
+
+            border-radius: 50%;
+
+            animation:
+                spin 0.8s linear infinite;
+
+            vertical-align: middle;
+
+            margin-right: 8px;
+        }
+
+
+        @keyframes spin {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                flex-direction: column;
+
+                gap: 15px;
+
+                padding: 15px 20px;
+            }
+
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <nav class="navbar">
+
+        <div class="logo">
+            CareerAI
+        </div>
+
+
+        <div class="nav-links">
+
+            <a href="/dashboard/">
+                Dashboard
+            </a>
+
+            <a href="/analysis/">
+                Analysis
+            </a>
+
+            <a href="/roadmap/">
+                Roadmap
+            </a>
+
+            <a href="/interview/">
+                Interview
+            </a>
+
+            <a href="/chat/">
+                AI Chat
+            </a>
+
+            <a href="/logout/">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+
+        <h1>
+            🎯 AI Career Analysis
+        </h1>
+
+
+        <p class="subtitle">
+            Personalized career insights generated from your CV.
+        </p>
+
+
+        {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+
+        {% if analysis %}
+
+
+        <!-- CAREER -->
+
+        <div class="card">
+
+            <h2>
+                Recommended Career
+            </h2>
+
+            <div class="career-title">
+                {{ analysis.recommended_career }}
+            </div>
+
+
+            <a
+                href="/generate-roadmap/"
+                class="button button-blue"
+                id="roadmap-button"
+                onclick="showRoadmapLoading()"
+            >
+                Generate AI Roadmap
+            </a>
+
+
+            <div
+                class="loading"
+                id="roadmap-loading"
+            >
+
+                <span class="spinner"></span>
+
+                CareerAI is creating your personalized roadmap...
+
+                <br>
+
+                <small>
+                    Please wait while the AI generates your learning path.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- STRENGTHS / SKILLS -->
+
+        <div class="grid">
+
+
+            <div class="card">
+
+                <h2>
+                    💪 Strengths
+                </h2>
+
+                <ul>
+
+                    {% for strength in analysis.strengths.splitlines %}
+
+                    <li>
+                        {{ strength }}
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+            <div class="card">
+
+                <h2>
+                    📚 Missing Skills
+                </h2>
+
+                <ul>
+
+                    {% for skill in analysis.missing_skills.splitlines %}
+
+                    <li>
+                        {{ skill }}
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- AI ANALYSIS -->
+
+        <div class="card">
+
+            <h2>
+                🤖 AI Analysis
+            </h2>
+
+            <div class="analysis-text">
+                {{ analysis.analysis }}
+            </div>
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="card empty">
+
+            <h2>
+                No analysis yet
+            </h2>
+
+            <p>
+                Upload your CV to generate your AI career analysis.
+            </p>
+
+            <a
+                href="/upload-cv/"
+                class="button"
+            >
+                Upload CV
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+    <script>
+
+        function showRoadmapLoading() {
+
+            document.getElementById(
+                "roadmap-loading"
+            ).style.display = "block";
+
+
+            document.getElementById(
+                "roadmap-button"
+            ).style.display = "none";
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
