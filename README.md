@@ -1,138 +1,103 @@
-# CareerAI 🤖
+# CareerAI 🚀
 
-CareerAI is an AI-powered career development platform built with Django and a local Generative AI model.
+AI-powered career guidance platform built with Django and Generative AI.
 
-The platform helps users analyze their CV, discover suitable career paths, identify missing skills, generate a personalized learning roadmap, practice job interviews, and communicate with an AI career assistant.
+CareerAI helps users understand their career path by analyzing their CV, identifying strengths and missing skills, generating personalized learning roadmaps, and practicing job interviews with AI.
 
-## ✨ Features
-
-### 🔐 Authentication
-- User registration
-- User login and logout
-- Protected dashboard
-- User-specific career data
-
-### 📄 CV Analysis
-- Upload CV as a PDF
-- Extract text from the uploaded CV
-- Analyze CV using Generative AI
-- Recommend a suitable career path
-- Identify strengths
-- Identify missing skills
-- Provide career analysis
-
-### 🗺️ AI Learning Roadmap
-- Generate a personalized learning roadmap
-- AI-generated learning steps
-- Track roadmap progress
-- Mark learning steps as completed
-
-### 🎤 AI Mock Interview
-- Generate interview questions using AI
-- Submit interview answers
-- Receive an AI-generated score
-- Get feedback
-- Identify strengths and areas for improvement
-# CareerAI 🤖
-
-CareerAI is an AI-powered career development platform built with Django and a local Generative AI model.
-
-The platform helps users analyze their CV, discover suitable career paths, identify missing skills, generate a personalized learning roadmap, practice job interviews, and communicate with an AI career assistant.
+---
 
 ## ✨ Features
 
-### 🔐 Authentication
-- User registration
-- User login and logout
-- Protected dashboard
-- User-specific career data
+- 🔐 User Registration & Login
+- 👤 User Profile
+- 📄 CV Upload & PDF Text Extraction
+- 🤖 AI-powered CV Analysis
+- 🎯 Career Recommendation
+- 💪 Strengths Identification
+- 📚 Missing Skills Detection
+- 🗺️ Personalized Learning Roadmap
+- ✅ Roadmap Progress Tracking
+- 🎤 AI Mock Interviews
+- 💬 AI Career Chat Assistant
 
-### 📄 CV Analysis
-- Upload CV as a PDF
-- Extract text from the uploaded CV
-- Analyze CV using Generative AI
-- Recommend a suitable career path
-- Identify strengths
-- Identify missing skills
-- Provide career analysis
-
-### 🗺️ AI Learning Roadmap
-- Generate a personalized learning roadmap
-- AI-generated learning steps
-- Track roadmap progress
-- Mark learning steps as completed
-
-### 🎤 AI Mock Interview
-- Generate interview questions using AI
-- Submit interview answers
-- Receive an AI-generated score
-- Get feedback
-- Identify strengths and areas for improvement
-
-### 💬 AI Career Assistant
-- Interactive AI chat
-- Career-related questions and guidance
-- Conversation history stored per user
-- Supports Arabic and English conversations
-
-## 🤖 Generative AI
-
-CareerAI uses a locally running Generative AI model through Ollama.
-
-### AI Stack
-
-- Ollama
-- Qwen3:8b
-- Local HTTP API
-- Python `urllib`
-- JSON-based AI responses
-
-Using a local AI model allows the application to run AI features without depending on external AI API quotas.
+---
 
 ## 🛠️ Technologies
 
-### Backend
 - Python
 - Django
+- PostgreSQL
 - SQLite
-
-### AI
-- Ollama
-- Qwen3:8b
-- Generative AI
-
-### Frontend
 - HTML
 - CSS
-- JavaScript
 - Bootstrap
-
-### PDF Processing
+- JavaScript
+- Ollama
+- Qwen3:8B
 - pypdf
+- Gunicorn
+- WhiteNoise
 
-### Development Tools
-- VS Code
-- Git
-- GitHub
-- Ubuntu Linux
+---
 
-## 📁 Project Structure
+## 🧠 AI Integration
+
+CareerAI uses Generative AI through Ollama with the Qwen3:8B model.
+
+The AI is used for:
+
+- CV analysis
+- Career recommendations
+- Strengths identification
+- Missing skills detection
+- Personalized learning roadmap generation
+- Mock interview questions
+- Interview scoring and feedback
+- Career assistance chat
+
+---
+
+## 📸 Screenshots
+
+### 🔐 Login
+
+![Login](screenshots/login.png)
+
+### 📊 Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### 🤖 Career Analysis
+
+![Career Analysis](screenshots/analysis.png)
+
+### 🗺️ Learning Roadmap
+
+![Learning Roadmap](screenshots/roadmap.png)
+
+### 🎤 Mock Interview
+
+![Mock Interview](screenshots/interview.png)
+
+### 💬 AI Career Chat
+
+![AI Chat](screenshots/chat.png)
+
+---
+
+## 📂 Project Structure
 
 ```text
 CareerAI/
 │
 ├── accounts/
 │   ├── migrations/
-│   ├── admin.py
-│   ├── apps.py
-│   ├── models.py
+│   ├── templates/
 │   ├── urls.py
 │   └── views.py
 │
 ├── ai/
 │   ├── migrations/
-│   ├── admin.py
-│   ├── apps.py
 │   ├── models.py
 │   ├── urls.py
 │   ├── utils.py
@@ -140,8 +105,6 @@ CareerAI/
 │
 ├── career/
 │   ├── migrations/
-│   ├── admin.py
-│   ├── apps.py
 │   ├── models.py
 │   ├── urls.py
 │   └── views.py
@@ -149,13 +112,22 @@ CareerAI/
 ├── config/
 │   ├── settings.py
 │   ├── urls.py
-│   ├── asgi.py
 │   └── wsgi.py
 │
 ├── templates/
 │   ├── accounts/
-│   ├── ai/
-│   └── career/
+│   ├── career/
+│   └── ai/
+│
+├── static/
+│
+├── screenshots/
+│   ├── login.png
+│   ├── dashboard.png
+│   ├── analysis.png
+│   ├── roadmap.png
+│   ├── interview.png
+│   └── chat.png
 │
 ├── manage.py
 ├── requirements.txt
