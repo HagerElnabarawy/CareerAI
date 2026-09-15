@@ -1,13 +1,27 @@
 import json
+import os
 import re
 import urllib.request
 
 from pypdf import PdfReader
 
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
-OLLAMA_MODEL = "qwen3:8b"
+# =========================
+# AI Configuration
+# =========================
 
+AI_API_URL = os.environ.get(
+    "AI_API_URL",
+    "http://localhost:11434/v1/chat/completions"
+)
+
+AI_API_KEY = os.environ.get("AI_API_KEY", "")
+AI_MODEL = os.environ.get("AI_MODEL", "qwen3:8b")
+
+
+# =========================
+# PDF Extraction
+# =========================
 
 def extract_pdf_text(file_path):
     reader = PdfReader(file_path)
@@ -23,7 +37,12 @@ def extract_pdf_text(file_path):
     return text.strip()
 
 
+# =========================
+# AI Request
+# =========================
+
 def ask_local_ai(prompt, history=None, json_mode=False):
+
     messages = []
 
     if history:
@@ -35,50 +54,58 @@ def ask_local_ai(prompt, history=None, json_mode=False):
     })
 
     payload = {
-        "model": OLLAMA_MODEL,
+        "model": AI_MODEL,
         "messages": messages,
         "stream": False,
-        "think": False
+        "temperature": 0.2
     }
 
-    # Force Ollama to return valid JSON
-    # when the feature needs structured data.
     if json_mode:
-        payload["format"] = "json"
+        payload["response_format"] = {
+            "type": "json_object"
+        }
 
     data = json.dumps(payload).encode("utf-8")
 
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    if AI_API_KEY:
+        headers["Authorization"] = f"Bearer {AI_API_KEY}"
+
     request = urllib.request.Request(
-        OLLAMA_URL,
+        AI_API_URL,
         data=data,
-        headers={
-            "Content-Type": "application/json"
-        },
+        headers=headers,
         method="POST"
     )
 
     try:
-        with urllib.request.urlopen(
-            request,
-            timeout=120
-        ) as response:
+
+        with urllib.request.urlopen(request, timeout=120) as response:
 
             result = json.loads(
                 response.read().decode("utf-8")
             )
 
-        return result["message"]["content"]
+        return result["choices"][0]["message"]["content"]
 
     except Exception as e:
+
         raise RuntimeError(
-            f"Local AI connection failed: {str(e)}"
+            f"AI connection failed: {str(e)}"
         )
 
 
+# =========================
+# JSON Extraction
+# =========================
+
 def extract_json(text):
+
     text = text.strip()
 
-    # Remove markdown code fences if the AI adds them.
     text = re.sub(
         r"```json\s*",
         "",
@@ -92,14 +119,13 @@ def extract_json(text):
         text
     )
 
-    # First try to parse the complete response.
     try:
+
         return json.loads(text)
 
     except json.JSONDecodeError:
         pass
 
-    # Try to extract a JSON object.
     start_object = text.find("{")
     end_object = text.rfind("}")
 
@@ -110,12 +136,12 @@ def extract_json(text):
         ]
 
         try:
+
             return json.loads(candidate)
 
         except json.JSONDecodeError:
             pass
 
-    # Try to extract a JSON array.
     start_array = text.find("[")
     end_array = text.rfind("]")
 
@@ -126,6 +152,7 @@ def extract_json(text):
         ]
 
         try:
+
             return json.loads(candidate)
 
         except json.JSONDecodeError:
